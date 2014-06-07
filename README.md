@@ -1,4 +1,4 @@
-Paladin is the open source codebase for Haskell.org for automation and
+Auron is the open source codebase for Haskell.org for automation and
 tooling. We use it to:
 
  - Deploy things reproducibly
@@ -8,4 +8,4 @@ tooling. We use it to:
 
 LICENSE
 
-Paladin is released under the MIT license except as otherwise noted.
+Auron is released under the MIT license except as otherwise noted.
