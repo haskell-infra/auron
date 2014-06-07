@@ -28,7 +28,7 @@ with import ../res/groups.nix;
 
   # Datadog
   services.dd-agent.enable  = false; # true;
-  services.dd-agent.api_key = readFile ../etc/priv/datadog.secret;
+  services.dd-agent.api_key = readFile ../../etc/priv/datadog.secret;
   # Duo Security
   security.duosec.ssh.enable = true;
   security.duosec.autopush   = true;
