@@ -1,0 +1,3 @@
+[submodule "etc/nixpkgs"]
+	path = etc/nixpkgs
+	url = https://github.com/haskell-infra/nixpkgs.git
