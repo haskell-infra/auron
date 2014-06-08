@@ -5,7 +5,9 @@
  */
 { config, pkgs, resources, lib, ... }:
 
+with lib;
 with builtins;
+with import ./nginx.nix { inherit lib; };
 
 {
   require = [ ./common.nix ./duosec.nix ];
