@@ -8,6 +8,6 @@ exec nix-shell release.nix -A shell \
   --command "export NIX_PATH=$AURON_NIXDIR; \
              export AURON_ETCDIR=$AURON_ETCDIR; \
              for x in ec2 vbox rackspace; do \
-               nixops info -d haskell-\$x > /dev/null; \
+               nixops info -d \$x > /dev/null; \
              done; \
              return"

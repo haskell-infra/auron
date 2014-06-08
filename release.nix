@@ -20,14 +20,14 @@ let
       shellHook = ''
         export NIXOPS_STATE=$HOME/.haskell-org.deployments.nixops
         export NIXOPS_DEPLOYMENT=haskell-vbox
-        if [[ -z `nixops list | grep haskell-ec2` ]]; then
-          nixops create src/network.nix src/deploy/ec2.nix -d haskell-ec2 > /dev/null 2>&1
+        if [[ -z `nixops list | grep ec2` ]]; then
+          nixops create src/network.nix src/deploy/ec2.nix -d ec2
         fi
-        if [[ -z `nixops list | grep haskell-vbox` ]]; then
-          nixops create src/network.nix src/deploy/vbox.nix -d haskell-vbox > /dev/null 2>&1
+        if [[ -z `nixops list | grep vbox` ]]; then
+          nixops create src/network.nix src/deploy/vbox.nix -d vbox
         fi
-        if [[ -z `nixops list | grep haskell-rackspace` ]]; then
-          nixops create src/network.nix src/deploy/rackspace.nix -d haskell-rackspace > /dev/null 2>&1
+        if [[ -z `nixops list | grep rackspace` ]]; then
+          nixops create src/network.nix src/deploy/rackspace.nix -d rackspace
         fi
       '';
     };
