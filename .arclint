@@ -1,7 +1,9 @@
 {
+  "exclude": "(^etc/nixpkgs)",
   "linters": {
     "filename": {
-      "type": "filename"
+      "type": "filename",
+      "exclude": [ "(^.gitmodules)" ]
     },
     "generated": {
       "type": "generated"
@@ -13,7 +15,13 @@
       "type": "nolint"
     },
     "text": {
-      "type": "text"
+      "type": "text",
+      "exclude": [ "(^src/res/users.nix)"
+                 , "(^src/hosts/nginx.nix)"
+                 , "(^src/hosts/rinoa.nix)"
+                 , "(^VERSION)"
+                 , "(^.gitmodules)"
+                 ]
     },
     "spelling": {
       "type": "spelling"

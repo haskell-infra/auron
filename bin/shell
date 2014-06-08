@@ -1,5 +1,6 @@
 #!/bin/sh
-canonical=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
+canonical=$(cd -P -- "$(dirname -- "$0")" && \
+            printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
 AURON_BINDIR=$(dirname -- "$canonical")
 AURON_SRCDIR=$(dirname -- "$AURON_BINDIR")
 AURON_NIXDIR=$AURON_SRCDIR/etc
