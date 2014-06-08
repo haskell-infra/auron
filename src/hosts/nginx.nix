@@ -67,6 +67,8 @@ rec {
   '';
 
   httpPlusHttps = opts: nginxHTTPServer ''
+    ${opts.upstreams}
+    ${opts.extraHttpConfig}
     server {
       server_name ${opts.serverNames};
       listen [::]:80 default_server ipv6only=off;
@@ -82,6 +84,8 @@ rec {
    * Creates an HTTPS only site configuration.
    */
   httpsOnly = opts: nginxHTTPServer ''
+    ${opts.upstreams}
+    ${opts.extraHttpConfig}
     server {
       server_name ${opts.serverNames};
       listen [::]:80 default_server ipv6only=off;
