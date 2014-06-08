@@ -10,6 +10,9 @@
     simons    = 10006;
     noteed    = 10007;
 
+    # -- Daemons/services
+    phab      = 10700;
+
     # -- Users
     testrix   = 11200;
     malcolm   = 11201;
@@ -17,6 +20,7 @@
   };
 
   gids = {
+    phab      = 10700;
     duosec    = 21000;
   };
 }

@@ -10,7 +10,7 @@ with import ./nginx.nix;
 with import ../res/users.nix { inherit lib; };
 
 {
-  require = [ ./common.nix ./duosec.nix ];
+  require = [ ./common.nix ];
 
   /* Networking configuration */
   networking.hostName = "rinoa";

@@ -10,12 +10,15 @@ with builtins;
 with import ./nginx.nix { inherit lib; };
 
 {
-  require = [ ./common.nix ./duosec.nix ];
+  require = [ ./common.nix
+              ../modules/phabricator.nix
+            ];
 
   /* Networking configuration */
   networking.hostName = "rikku";
   networking.firewall.allowedTCPPorts =
-    [ 80 443
+    [ 80 443    # HTTP(s)
+      843 22280 # Phabricator notifications
     ];
 
   /* Spiped backend for MariaDB */
@@ -29,14 +32,15 @@ with import ./nginx.nix { inherit lib; };
       };
   };
 
-  /* Nginx configuration */
+  /* Phabricator configuration */
+  services.phabricator.enable = true;
   services.nginx.enable = true;
   services.nginx.config = httpsOnly
     { serverNames = "phabricator.haskell.org phabricator-files.haskell.org";
       hsts       = false;
       xframeDeny = false;
       config = ''
-        root /opt/phabricator/webroot;
+        root /var/lib/phab/phabricator/webroot;
 
         location / {
           index index.php;
@@ -48,7 +52,7 @@ with import ./nginx.nix { inherit lib; };
         }
 
         location /index.php {
-          fastcgi_pass    unix:/var/run/php5-fpm.sock;
+          fastcgi_pass    unix:/run/phpfpm/phabricator.sock;
           fastcgi_index   index.php;
 
           #required if PHP was built with --enable-force-cgi-redirect

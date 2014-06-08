@@ -9,7 +9,7 @@
 with builtins;
 
 {
-  require = [ ./common.nix ./duosec.nix ];
+  require = [ ./common.nix ];
 
   /* Networking configuration */
   networking.hostName = "cid";

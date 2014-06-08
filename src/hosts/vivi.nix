@@ -8,7 +8,7 @@
 with builtins;
 
 {
-  require = [ ./common.nix ./duosec.nix ];
+  require = [ ./common.nix ];
 
   /* Networking configuration */
   networking.hostName = "vivi";
@@ -19,6 +19,9 @@ with builtins;
   /* MariaDB configuration */
   services.mysql.enable  = true;
   services.mysql.package = pkgs.mariadb;
+  services.mysql.extraOptions = ''
+    sql_mode=STRICT_ALL_TABLES
+  '';
 
   /* Spiped frontend */
   /* TODO: use a unix pipe for the target? */
