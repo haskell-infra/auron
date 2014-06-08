@@ -20,7 +20,7 @@ let
         ];
       shellHook = ''
         export NIXOPS_STATE=$HOME/.haskell-org.deployments.nixops
-        export NIXOPS_DEPLOYMENT=haskell-vbox
+        export NIXOPS_DEPLOYMENT=vbox
         if [[ -z `nixops list | grep ec2` ]]; then
           nixops create src/network.nix src/deploy/ec2.nix -d ec2
         fi
