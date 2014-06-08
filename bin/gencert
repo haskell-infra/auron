@@ -1,0 +1,5 @@
+#!/bin/sh
+canonical=$(cd -P -- "$(dirname -- "$0")" && \
+            printf '%s\n' "$(pwd -P)/$(basename -- "$0")")
+AURON_BINDIR=$(dirname -- "$canonical")
+exec bash $AURON_BINDIR/gencert.sh $@
