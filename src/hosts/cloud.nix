@@ -1,7 +1,7 @@
 /** cloud - ghc/git configuration
  *
  * "You look like a bear wearing a marshmallow."
- *    - Cloud, FFVII
+ *    - Cloud Strife, FFVII
  */
 { config, pkgs, resources, lib, ... }:
 
