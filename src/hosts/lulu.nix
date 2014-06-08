@@ -2,7 +2,7 @@
  *
  * "You always said I looked grumpy, but those were the happiest days
  *  of my life."
- *    - Lulu, FFX
+ *    - Lulu, Final Fantasy X
  */
 { config, pkgs, resources, lib, ... }:
 

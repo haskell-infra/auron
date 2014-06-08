@@ -1,7 +1,7 @@
 /** rikku - phabricator configuration
  *
  * "You can cram your happy festival, you big meanie!"
- *    - Rikku, FFX
+ *    - Rikku, Final Fantasy X
  */
 { config, pkgs, resources, lib, ... }:
 
