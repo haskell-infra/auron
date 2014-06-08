@@ -16,7 +16,7 @@ with builtins;
     [ 80 443
     ];
 
-  /* Spiped backend for MySQL */
+  /* Spiped backend for MariaDB */
   services.spiped.enable = true;
   services.spiped.config = {
     mysql =

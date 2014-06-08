@@ -16,6 +16,17 @@ with builtins;
     [ 80 443
     ];
 
+  /* Spiped backend for MariaDB */
+  services.spiped.enable = true;
+  services.spiped.config = {
+    mysql =
+      { keyfile = "/var/lib/spiped/mysql.key";
+        encrypt = true;
+        source  = "0.0.0.0:3306";
+        target  = "mysql01:9000";
+      };
+  };
+
   /* Nginx configuration */
   services.nginx.enable = true;
   services.nginx.config = httpPlusHttps
