@@ -13,6 +13,7 @@
     # -- Users
     testrix   = 11200;
     malcolm   = 11201;
+    ajk       = 11202;
   };
 
   gids = {

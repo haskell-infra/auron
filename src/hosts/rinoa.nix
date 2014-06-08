@@ -18,7 +18,7 @@ with import ../res/users.nix { inherit lib; };
     [ 80 443
     ];
 
-  /* Users - we really only need Malcolm here */
+  /* Users - we only need Malcolm here */
   users.extraUsers = { inherit malcolm; };
 
   /* Nginx configuration */
@@ -28,11 +28,8 @@ with import ../res/users.nix { inherit lib; };
       server_name darcs.haskell.org;
       listen [::]:80 default_server ipv6only=off;
       listen [::]:443 default_server ssl spdy ipv6only=off;
-
-      ssl_certificate     /etc/ssl/certs/haskell.org.crt;
-      ssl_certificate_key /etc/ssl/private/haskell.org.key;
-      ssl_trusted_certificate /etc/ssl/certs/haskell.org.crt;
-      ${defaultNginxSSLServerOpts}
+      ${httpStatusOpts}
+      ${tlsServerOpts}
 
       # legacy Git redirects (known to work for Git 1.7.3.4 and later)
       rewrite ^/(ghc|ghc-tarballs|haddock|hsc2hs|libffi-tarballs|nofib|testsuite)\.git(/.*)?$   $scheme://git.haskell.org/$1.git$2 permanent;
@@ -42,14 +39,6 @@ with import ../res/users.nix { inherit lib; };
       # serving /home/darcs/
       index index.html index.htm;
       root /home/darcs;
-
-      # datadog stats
-      location /nginx_status {
-        stub_status     on;
-        access_log      off;
-        allow           127.0.0.1;
-        deny            all;
-      }
 
       location / {
         autoindex on;

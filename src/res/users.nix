@@ -147,4 +147,17 @@ rec {
         "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAsRQscePXY/Wo72FBjTIYjRnI4lOwQFwMVEMEEpm9cAUpjrDMw4XR+11lr8zAwlAIis8E7coHgrXVQeIiuzH6B1kR2Ll/emn6U5Jw6kGyr2UnpzmifD7raKhXfcOlZFtUI8F/Zz92yuPSGBB5O9gb5hu/vR/zKbQWHqFcXYdgxCsNEQPnUkb6F/Ay1GdaA1ZDr4Iy+IeTNovil+z030EMfe2tMoh2Z7CZiDqHucpRhjqLe/3nrBXJn+AxYTzG5YsAyRsRoB298qcobcvantKBcEYm+fQDqcIgXgnKkWgk3tcgIMkut0r3VJy9CGQbIVUJM3gF18eCc4/Vgkc2cf6oUw== malcolm@bishop.local"
       ];
   };
+
+  ajk = {
+    description     = "Antti-Juhani Kaijanaho";
+    home            = "/home/ajk";
+    createHome      = true;
+    uid             = with import ./ids.nix; uids.ajk;
+    group           = "users";
+    useDefaultShell = true;
+    openssh.authorizedKeys.keys =
+      [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXNOY4lk1YnIJZJ8F1FjCXxCPS7b8c9qZSgmKcHt8dREN+BbgxwiVGfa/2EGC2ASy5QMt10ioVsZBJOEAUrDaHnclwxlBA81FakBemfCqJ3lQEQI7Ay6rRDMYoWw5BVY4pUjoz38g+t8PghA4Z4QuDU79PPvZxHbOjaMvPwxITFk+BeltrcYtLBei6nPRiVVBqWsLnqsIDkBTQUzp8M99nLtege7E3vUnzBedkJ9jjHm+1Im6HgYKS6OHUEUBu/nw8JXHTFo3B4Abk9UtLAGZqQw3dMuJ39Zf+GcdRZ3q2uG/61mjAwZenxEftKimhLSggWG16jVtGJLsAgicl8xxN ajk@kukkavihko"
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDNcaX+Jetuc6g9UOs9ug8c9+495NvKmxYwv24eu2AD4n18iQGZAjEZwBoGF8Ij3AYOvwkIBaEc2h3xsRiWL6HJ6pCbQ8qlulveg7IkE/vFh8QgZFo7dmIkN3ZTJrdvnxAE8jV6rieVGfbmBoF3KdmKLuL+Muqqw2gpM8ADSYcHSDVeo9V8VlI/BrBsVjS5WXdgLGUgKDN6FrZsIXhHqXmEVgVXLB6CjJnuD3hvJZ1xXvTr6hr1D7ikwfLcoXXIVYqE9f4ZtdYZv/aWuKJJg2L3DLUPKGyOpfgM5jZyFbcCRJznZVsWXU9UfYQZB0c1OWre9BpYvP747onLbxG+PXH ajk@teralehti"
+      ];
+  };
 }
