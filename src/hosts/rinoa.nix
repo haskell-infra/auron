@@ -23,27 +23,22 @@ with import ../res/users.nix { inherit lib; };
 
   /* Nginx configuration */
   services.nginx.enable = true;
-  services.nginx.config = nginxHTTPServer ''
-    server {
-      server_name darcs.haskell.org;
-      listen [::]:80 default_server ipv6only=off;
-      listen [::]:443 default_server ssl spdy ipv6only=off;
-      ${httpStatusOpts}
-      ${tlsServerOpts}
+  services.nginx.config = httpPlusHttps
+    { serverNames = "darcs.haskell.org";
+      config = ''
+        # legacy Git redirects (known to work for Git 1.7.3.4 and later)
+        rewrite ^/(ghc|ghc-tarballs|haddock|hsc2hs|libffi-tarballs|nofib|testsuite)\.git(/.*)?$   $scheme://git.haskell.org/$1.git$2 permanent;
+        rewrite ^/packages/([0-9A-Za-z-.]*)\.git(/.*)?$                                           $scheme://git.haskell.org/packages/$1.git$2 permanent;
+        rewrite ^/libraries/([0-9A-Za-z-.]*)\.git(/.*)?$                                          $scheme://git.haskell.org/packages/$1.git$2 permanent;
 
-      # legacy Git redirects (known to work for Git 1.7.3.4 and later)
-      rewrite ^/(ghc|ghc-tarballs|haddock|hsc2hs|libffi-tarballs|nofib|testsuite)\.git(/.*)?$   $scheme://git.haskell.org/$1.git$2 permanent;
-      rewrite ^/packages/([0-9A-Za-z-.]*)\.git(/.*)?$                                           $scheme://git.haskell.org/packages/$1.git$2 permanent;
-      rewrite ^/libraries/([0-9A-Za-z-.]*)\.git(/.*)?$                                          $scheme://git.haskell.org/packages/$1.git$2 permanent;
+        # serving /home/darcs/
+        index index.html index.htm;
+        root /home/darcs;
 
-      # serving /home/darcs/
-      index index.html index.htm;
-      root /home/darcs;
-
-      location / {
-        autoindex on;
-        try_files $uri $uri/ =404;
-      }
-    }
-  '';
+        location / {
+          autoindex on;
+          try_files $uri $uri/ =404;
+        }
+      '';
+    };
 }

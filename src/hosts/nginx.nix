@@ -66,14 +66,25 @@ rec {
     }
   '';
 
+  httpPlusHttps = opts: nginxHTTPServer ''
+    server {
+      server_name ${opts.serverNames};
+      listen [::]:80 default_server ipv6only=off;
+      listen [::]:443 default_server ssl spdy ipv6only=off;
+      ${httpStatusOpts}
+      ${tlsServerOpts}
+
+      ${opts.config}
+    }
+  '';
+
   /**
    * Creates an HTTPS only site configuration.
    */
   httpsOnly = opts: nginxHTTPServer ''
     server {
       server_name ${opts.serverNames};
-      listen      80;
-      listen [::]:80;
+      listen [::]:80 default_server ipv6only=off;
       ${httpStatusOpts}
 
       location / {
@@ -83,8 +94,7 @@ rec {
 
     server {
       server_name ${opts.serverNames};
-      listen      443 ssl spdy;
-      listen [::]:443 ssl spdy;
+      listen [::]:443 default_server ssl spdy ipv6only=off;
       ${tlsServerOpts}
 
       ${optionalString opts.hsts ''
