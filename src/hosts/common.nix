@@ -30,13 +30,13 @@ with import ../res/groups.nix;
   services.dd-agent.enable  = false; # true;
   services.dd-agent.api_key = readFile ../../etc/priv/datadog.secret;
   # Duo Security
-  security.duosec.ssh.enable = true;
+  security.duosec.ssh.enable = false; # true;
   security.duosec.autopush   = true;
   security.duosec.group      = "duosec";
 
   # -- Users
-  users.mutableUsers = false;
-  users.extraUsers         = admins // { inherit testrix; };
+  users.mutableUsers       = false;
+  users.extraUsers         = admins; /* or: admins // { inherit testrix; }; */
   users.extraGroups.duosec = duosec;
 
   # -- Nix options
