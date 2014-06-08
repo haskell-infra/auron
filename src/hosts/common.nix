@@ -6,7 +6,10 @@ with import ../res/users.nix { inherit lib; };
 with import ../res/groups.nix;
 
 {
-  imports = [ ./datadog.nix ./duosec.nix ];
+  imports = [ ./datadog.nix
+              ./duosec.nix
+              ./tarsnap.nix
+            ];
   nixpkgs.config.allowUnfree = true;
 
   # -- Networking
