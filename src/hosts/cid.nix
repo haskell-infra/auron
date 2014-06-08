@@ -23,7 +23,6 @@ with builtins;
     { serverNames = "haskell.org www.haskell.org";
       config = ''
         location / {
-          root /www/planet/public_html;
         }
       '';
     };
