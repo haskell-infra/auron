@@ -6,7 +6,7 @@ with import ../res/users.nix { inherit lib; };
 with import ../res/groups.nix;
 
 {
-  imports = [ ];
+  imports = [ ./datadog.nix ./duosec.nix ];
   nixpkgs.config.allowUnfree = true;
 
   # -- Networking
@@ -25,14 +25,6 @@ with import ../res/groups.nix;
   services.xserver.enable  = false;
   services.sshd.enable = true;
   time.timeZone = "America/Chicago";
-
-  # Datadog
-  services.dd-agent.enable  = false; # true;
-  services.dd-agent.api_key = readFile ../../etc/priv/datadog.secret;
-  # Duo Security
-  security.duosec.ssh.enable = false; # true;
-  security.duosec.autopush   = true;
-  security.duosec.group      = "duosec";
 
   # -- Users
   users.mutableUsers       = false;
