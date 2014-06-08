@@ -1,5 +1,4 @@
-
-{
+rec {
   /**
    * Default nginx HTTP server block
    */
@@ -64,6 +63,38 @@
       access_log      off;
       allow           127.0.0.1;
       deny            all;
+    }
+  '';
+
+  /**
+   * Creates an HTTPS only site configuration.
+   */
+  httpsOnly = opts: nginxHTTPServer ''
+    server {
+      server_name ${opts.serverNames};
+      listen      80;
+      listen [::]:80;
+      ${httpStatusOpts}
+
+      location / {
+        return 302 https://$host$request_uri;
+      }
+    }
+
+    server {
+      server_name ${opts.serverNames};
+      listen      443 ssl spdy;
+      listen [::]:443 ssl spdy;
+      ${tlsServerOpts}
+
+      ${optionalString opts.hsts ''
+        add_header Strict-Transport-Security "max-age=31536000";
+      ''}
+      ${optionalString opts.xframeDeny ''
+        add_header X-Frame-Options DENY;
+      ''}
+
+      ${opts.config}
     }
   '';
 }
