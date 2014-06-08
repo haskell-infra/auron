@@ -16,6 +16,7 @@ let
       src = ./.;
       buildInputs = with pkgs;
         [ php python27 arcanist nixops nix git
+          python27Packages.pyflakes python27Packages.pep8
         ];
       shellHook = ''
         export NIXOPS_STATE=$HOME/.haskell-org.deployments.nixops

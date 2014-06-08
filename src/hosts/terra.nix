@@ -26,17 +26,6 @@ with builtins;
       '';
 
       extraHttpConfig = ''
-        # Zone to rate-limit badly behaved mirror clients
-        #geo $badmirrorclient_ip {
-        #    default         1;
-        #    54.220.210.149  0;
-        #}
-        #map $badmirrorclient_ip $badmirrorclient_ip_key {
-        #    0 '';
-        #    1 $binary_remote_addr;
-        #}
-        #limit_req_zone $badmirrorclient_ip_key
-        #                 zone=badmirror:50k rate=1r/m;
       '';
 
       config = let
