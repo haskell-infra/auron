@@ -10,8 +10,7 @@ let
 
   # APC 3.1.13 is recommended for Phabricator
   pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
-    inherit php;
-    inherit (pkgs) stdenv autoreconfHook;
+    inherit php; inherit (pkgs) stdenv autoreconfHook;
   };
   phab-apc = pecl rec {
     name = "phab-apc-${version}";
@@ -102,7 +101,7 @@ let
       #!/bin/sh
       cd /var/lib/phab/phabricator
       exec ./bin/config \$@
-      chown -R phab:phab /var/lib/phab # Set proper permissions
+      chown -R phab:phab /var/lib/phab ${cfg.localStoragePath} # Set perms
       EOF
 
       cat > $out/sbin/phab-phd <<EOF
@@ -140,6 +139,12 @@ in
         type = types.str;
         default = "10M";
         description = "Upload file size limit for Phabricator/phpfpm";
+      };
+
+      localStoragePath = mkOption {
+        type = types.nullOr types.str;
+        default = "/var/lib/phab/data";
+        description = "Path to store local files for Phabricator";
       };
     };
   };
@@ -180,8 +185,12 @@ in
           if [ ! -d /root/ssl ]; then
             ${gencert}/bin/gencert
           fi
-          mkdir -p /var/repo
+          mkdir -p /var/repo ${cfg.localStoragePath}
           ${phab-admin}/sbin/phab-config set mysql.port 3306
+          ${optionalString (cfg.localStoragePath != null) ''
+            ${phab-admin}/sbin/phab-config set storage.local-disk.path \
+              ${cfg.localStoragePath}
+          ''}
           ${phab-admin}/sbin/phab-config set storage.mysql-engine.max-size 0
           ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
             ${cfg.uploadLimit}
@@ -189,7 +198,7 @@ in
             ${config.time.timeZone}
           ${phab-admin}/sbin/phab-config set environment.append-paths \
             '["/run/current-system/sw/bin","/run/current-system/sw/sbin"]'
-          chown -R phab:phab /var/lib/phab /var/repo
+          chown -R phab:phab /var/lib/phab /var/repo ${cfg.localStoragePath}
         '';
 
         serviceConfig.User = "root";
