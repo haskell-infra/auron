@@ -182,6 +182,7 @@ in
           fi
           mkdir -p /var/repo
           ${phab-admin}/sbin/phab-config set mysql.port 3306
+          ${phab-admin}/sbin/phab-config set storage.mysql-engine.max-size 0
           ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
             ${cfg.uploadLimit}
           ${phab-admin}/sbin/phab-config set phabricator.timezone \
