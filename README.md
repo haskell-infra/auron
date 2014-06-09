@@ -25,20 +25,66 @@ This will drop you into an instance of `nix-shell`, with
 pre-configured NixOps networks for EC2, Rackspace, and VirtualBox. You
 can run `nixops list` to see all networks and VMs.
 
-For instance, to deploy a Phabricator+MySQL server pair, run:
+Getting started
+-----------------
+
+Once you've launched `./bin/shell`, you can begin deployments. The
+default nixops network is `vbox`, which uses the VirtualBox backend
+for testing.
+
+To get started, deploy a MariaDB and Phabricator pair:
 
 ```
-$ nixops deploy -d vbox --option extra-binary-caches http://hydra.nixos.org \
-    --include mysql01 phabricator
+$ nixops deploy --include mysql01 phabricator
 ```
+
+This will initially fail because `phabricator`'s `nginx` server does
+not have proper SSL certificates enabled. We can fix this by
+generating temporary certificates, and redeploying (we only need to
+redeploy `phabricator`).
+
+We also need to generate keys for `spiped`, so that the Phabricator
+server can securely communicate with the MariaDB server.
+
+```
+$ ./bin/genspiped mysql mysql01 phabricator
+$ ./bin/gencert phabricator
+$ nixops deploy --include mysql01 phabricator
+```
+
+Finally, set the `phabricator.base-uri` configuration option (so
+Phabricator knows where to load resources from), and install the
+database schema.
+
+NOTE: Set `phabricator.base-uri` to the FQDN your server will be
+located at, or set it to the IP address assigned in `nixops
+info`. Note the protocol must be `https`.
+
+```
+$ nixops ssh phabricator -- \
+    phab-config set phabricator.base-uri "https://<YOUR BASE URI>/
+$ nixops ssh phabricator -- \
+    phab-upgrade --nopass
+```
+
+Now, visit the URL you specified for `base-uri` (either the IP address
+or FQDN) and register an administration account. Once you're logged
+in, you'll need to configure mail and authentication.
+
+Other providers
+-----------------
 
 The default deployment network is `vbox` for testing. You can change
-this for all commands in the shell to `ec2` or `rackspace` by running:
+this for all commands in the shell to `ec2` or `rackspace` by setting
+the `NIXOPS_DEPLOYMENT` environment variable before `nixops deploy`:
+
 
 ```
-$ export NIXOPS_DEPLOYMENT=ec2
 $ export NIXOPS_DEPLOYMENT=rackspace
+$ export NIXOPS_DEPLOYMENT=ec2
 ```
+
+Then use `nixops` as usual.
 
 NOTE: The `rackspace` provider does not work and falls back to
 VirtualBox. See
