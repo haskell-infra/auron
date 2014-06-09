@@ -21,10 +21,20 @@ let
     };
   };
 
+  phab-suhosin = pecl rec {
+    name = "phab-suhosin-${version}";
+    version = "0.9.35";
+    src = pkgs.fetchurl {
+      url = "http://download.suhosin.org/suhosin-${version}.tgz";
+      sha256 = "088gk2wh2md56wplhsinm9avs56cvc129fqqvagx02q6nsqjxphr";
+    };
+  };
+
   phpIni = pkgs.runCommand "php.ini" {} ''
     cat ${php}/etc/php-recommended.ini > $out
 
     echo "extension=${phab-apc}/lib/php/extensions/apc.so" >> $out
+    echo "extension=${phab-suhosin}/lib/php/extensions/suhosin.so" >> $out
     echo "apc.stat = '0'" >> $out
     substituteInPlace $out \
       --replace ";upload_max_filesize = 2M" \
@@ -188,6 +198,7 @@ in
 
     systemd.services.phpfpm.environment = { PHPRC = phpIni; };
     systemd.services.phpfpm.path = [ pkgs.ssmtp ];
+    services.phpfpm.phpPackage = php;
     services.phpfpm.poolConfigs =
       { phabricator = ''
           listen = /run/phpfpm/phabricator.sock
