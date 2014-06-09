@@ -38,38 +38,34 @@ To get started, deploy a MariaDB and Phabricator pair:
 $ nixops deploy --include mysql01 phabricator
 ```
 
-This will initially fail because `phabricator`'s `nginx` server does
-not have proper SSL certificates enabled. We can fix this by
-generating temporary certificates, and redeploying (we only need to
-redeploy `phabricator`).
+NOTE: This generates temporary SSL keys for nginx.
 
 We also need to generate keys for `spiped`, so that the Phabricator
-server can securely communicate with the MariaDB server.
+server can securely communicate with the MariaDB server. This
+automatically restarts the right `systemd` units and copies the keys
+in the right place, so you can run this command over and over to rekey
+the servers.
 
 ```
 $ ./bin/genspiped mysql mysql01 phabricator
-$ ./bin/gencert phabricator
-$ nixops deploy --include mysql01 phabricator
 ```
 
-Finally, set the `phabricator.base-uri` configuration option (so
-Phabricator knows where to load resources from), and install the
-database schema.
+Finally, upgrade the database schema, and set the
+`phabricator.base-uri` configuration option (so Phabricator knows
+where to load resources from). This can be done with a one-liner.
 
 NOTE: Set `phabricator.base-uri` to the FQDN your server will be
 located at, or set it to the IP address assigned in `nixops info`.
 Note the protocol must be `https`.
 
 ```
-$ nixops ssh phabricator -- \
-    phab-config set phabricator.base-uri "https://<YOUR BASE URI>/
-$ nixops ssh phabricator -- \
-    phab-upgrade --nopass
+$ nixops ssh phabricator -- phab-upgrade --nopass && nixops ssh phabricator -- \
+    phab-config set phabricator.base-uri https://<YOUR BASE URI>/
 ```
 
 Now, visit the URL you specified for `base-uri` (either the IP address
 or FQDN) and register an administration account. Once you're logged
-in, you'll need to configure mail and authentication.
+in, you'll need to configure mail and authentication providers.
 
 Other providers
 -----------------

@@ -6,6 +6,7 @@ with import ../res/ids.nix;
 let
   cfg = config.services.phabricator;
   php = pkgs.php54;
+  gencert = import ../pkgs/gencert.nix;
 
   # APC 3.1.13 is recommended for Phabricator
   pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
@@ -101,6 +102,7 @@ let
       #!/bin/sh
       cd /var/lib/phab/phabricator
       exec ./bin/config \$@
+      chown -R phab:phab /var/lib/phab # Set proper permissions
       EOF
 
       cat > $out/sbin/phab-phd <<EOF
@@ -160,6 +162,7 @@ in
     systemd.services."phabricator-init" =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "network.target" ];
+        before   = [ "nginx.service" ];
 
         path = [ php ];
         script = ''
@@ -174,8 +177,10 @@ in
             ${pkgs.git}/bin/git clone ${cfg.src.phabricator}
           fi
 
+          if [ ! -d /root/ssl ]; then
+            ${gencert}/bin/gencert
+          fi
           mkdir -p /var/repo
-          chown -R phab:phab /var/lib/phab /var/repo
           ${phab-admin}/sbin/phab-config set mysql.port 3306
           ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
             ${cfg.uploadLimit}
@@ -183,8 +188,10 @@ in
             ${config.time.timeZone}
           ${phab-admin}/sbin/phab-config set environment.append-paths \
             '["/run/current-system/sw/bin","/run/current-system/sw/sbin"]'
+          chown -R phab:phab /var/lib/phab /var/repo
         '';
 
+        serviceConfig.User = "root";
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
       };

@@ -5,6 +5,9 @@ with builtins;
 with import ../res/users.nix { inherit lib; };
 with import ../res/groups.nix;
 
+let
+  gencert = import ../pkgs/gencert.nix;
+in
 {
   imports = [ ./datadog.nix
               ./duosec.nix
@@ -50,5 +53,8 @@ with import ../res/groups.nix;
   environment.systemPackages = with pkgs;
     [ emacs24-nox vim subversion git darcs sqlite gcc htop mosh spiped tmux
       silver-searcher reptyr nmap ssdeep gdb python27 lsof scrypt
+
+      # Custom packages
+      gencert
     ];
 }
