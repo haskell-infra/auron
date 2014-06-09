@@ -6,7 +6,7 @@
 { config, pkgs, resources, lib, ... }:
 
 with builtins;
-with import ./roles/nginx.nix;
+with import ./roles/nginx.nix { inherit lib; };
 with import ../res/users.nix { inherit lib; };
 
 {

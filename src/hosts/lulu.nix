@@ -7,7 +7,7 @@
 { config, pkgs, resources, lib, ... }:
 
 with builtins;
-with import ./roles/nginx.nix;
+with import ./roles/nginx.nix { inherit lib; };
 
 {
   require = [ ./common.nix ./roles/gencert.nix ];
