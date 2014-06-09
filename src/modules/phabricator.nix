@@ -204,7 +204,6 @@ in
       };
 
     systemd.services.phpfpm.environment = { PHPRC = phpIni; };
-    systemd.services.phpfpm.path = [ pkgs.ssmtp ];
     services.phpfpm.phpPackage = php;
     services.phpfpm.poolConfigs =
       { phabricator = ''
