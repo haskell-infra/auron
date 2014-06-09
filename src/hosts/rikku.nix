@@ -40,6 +40,8 @@ with import ./nginx.nix { inherit lib; };
       hsts       = false;
       xframeDeny = false;
       config = ''
+        client_max_body_size 50m;
+        # The following is the recommended Phabricator config for Nginx.
         root /var/lib/phab/phabricator/webroot;
 
         location / {
