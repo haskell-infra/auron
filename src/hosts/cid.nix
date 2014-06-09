@@ -7,9 +7,10 @@
 { config, pkgs, resources, lib, ... }:
 
 with builtins;
+with import ./roles/nginx.nix;
 
 {
-  require = [ ./common.nix ];
+  require = [ ./common.nix ./roles/gencert.nix ];
 
   /* Networking configuration */
   networking.hostName = "cid";

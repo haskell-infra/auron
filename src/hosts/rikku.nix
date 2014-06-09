@@ -7,13 +7,14 @@
 
 with lib;
 with builtins;
-with import ./nginx.nix { inherit lib; };
+with import ./roles/nginx.nix { inherit lib; };
 
 let
   uploadSize = "50M";
 in
 {
   require = [ ./common.nix
+              ./roles/gencert.nix
               ../modules/phabricator.nix
             ];
 

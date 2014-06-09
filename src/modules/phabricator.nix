@@ -6,7 +6,6 @@ with import ../res/ids.nix;
 let
   cfg = config.services.phabricator;
   php = pkgs.php54;
-  gencert = import ../pkgs/gencert.nix;
 
   # APC 3.1.13 is recommended for Phabricator
   pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
@@ -182,9 +181,6 @@ in
             ${pkgs.git}/bin/git clone ${cfg.src.phabricator}
           fi
 
-          if [ ! -d /root/ssl ]; then
-            ${gencert}/bin/gencert
-          fi
           mkdir -p /var/repo ${cfg.localStoragePath}
           ${phab-admin}/sbin/phab-config set mysql.port 3306
           ${optionalString (cfg.localStoragePath != null) ''

@@ -6,11 +6,11 @@
 { config, pkgs, resources, lib, ... }:
 
 with builtins;
-with import ./nginx.nix;
+with import ./roles/nginx.nix;
 with import ../res/users.nix { inherit lib; };
 
 {
-  require = [ ./common.nix ];
+  require = [ ./common.nix ./roles/gencert.nix ];
 
   /* Networking configuration */
   networking.hostName = "squall";

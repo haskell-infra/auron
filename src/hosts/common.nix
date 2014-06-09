@@ -9,9 +9,9 @@ let
   gencert = import ../pkgs/gencert.nix;
 in
 {
-  imports = [ ./datadog.nix
-              ./duosec.nix
-              ./tarsnap.nix
+  imports = [ ./roles/datadog.nix
+              ./roles/duosec.nix
+              ./roles/tarsnap.nix
             ];
   nixpkgs.config.allowUnfree = true;
 
