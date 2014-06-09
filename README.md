@@ -20,9 +20,10 @@ IMPORTANT: You must be using
 - Run `./bin/shell`
 
 To deploy a Phabricator+MySQL server pair, for example, run:
+
 ```
 $ nixops deploy -d vbox --option extra-binary-caches http://hydra.nixos.org \
-    --include haskell-keypair mysql01 phabricator`
+    --include mysql01 phabricator
 ```
 
 You can change `vbox` to other things, such as `ec2` (provided you have a
