@@ -17,7 +17,8 @@ IMPORTANT: You must be using Linux and
 [Nix](http://nixos.org/nix/manual/#chap-installation) 1.7 or later for
 things to work properly! Otherwise `./bin/shell` will not start.
 
-- Clone this repo
+- Clone this repo.
+- Update the submodules - run `git submodule init && git submodule update`
 - Run `./bin/shell`
 
 This will drop you into an instance of `nix-shell`, with
