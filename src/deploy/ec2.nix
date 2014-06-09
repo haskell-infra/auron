@@ -9,7 +9,7 @@ let
       deployment.ec2.instanceType = "m1.small";
       deployment.ec2.keyPair      = resources.ec2KeyPairs.haskell-keypair;
       deployment.ec2.securityGroups =
-        [ "allow-ssh" "allow-http" "allow-https" ];
+        [ "all-open" ];
     };
 in
 {
