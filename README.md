@@ -1,4 +1,5 @@
-= Auron
+Auron
+=====
 
 Auron is the open source codebase for Haskell.org for automation and
 tooling. We use it to:
@@ -8,7 +9,8 @@ tooling. We use it to:
  - Send patches to [Phabricator](https://phabricator.haskell.org).
  - And more!
 
-== Setup
+Setup
+-----
 
 IMPORTANT: You must be using
 [Nix](http://hydra.nixos.org/build/11757938/download/1/manual/manual.html#chap-installation)
@@ -27,13 +29,15 @@ nixops deploy -d vbox --option extra-binary-caches http://hydra.nixos.org \
 You can change `vbox` to other things, such as `ec2` (provided you have a
 valid `~/.ec2-keys` set up), or `rackspace` (which doesn't work yet).
 
-= CONTRIBUTING
+CONTRIBUTING
+============
 
 Patches, comments, etc should be submitted through
 [Phabricator](https://phabricator.haskell.org).
 
 See the `CONTRIBUTING.md` file for details.
 
-= LICENSE
+LICENSE
+=======
 
 Auron is released under the MIT license except as otherwise noted.
