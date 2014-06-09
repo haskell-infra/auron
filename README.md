@@ -57,8 +57,8 @@ Phabricator knows where to load resources from), and install the
 database schema.
 
 NOTE: Set `phabricator.base-uri` to the FQDN your server will be
-located at, or set it to the IP address assigned in `nixops
-info`. Note the protocol must be `https`.
+located at, or set it to the IP address assigned in `nixops info`.
+Note the protocol must be `https`.
 
 ```
 $ nixops ssh phabricator -- \
