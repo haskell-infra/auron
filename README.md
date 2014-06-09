@@ -1,9 +1,9 @@
 Auron
 =================
 
-Auron is the open source codebase for Haskell.org for automation,
-built on [NixOS](http://nixos.org) and
-[NixOps](http://nixos.org/nixops). We use it to:
+Auron is the open source codebase automating
+[Haskell.org](https://haskell.org), built on [NixOS](http://nixos.org)
+and [NixOps](http://nixos.org/nixops). We use it to:
 
  - Deploy things reproducibly and easily from any Linux box.
  - Send status updates to the [status site](http://status.haskell.org).
