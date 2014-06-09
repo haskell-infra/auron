@@ -53,8 +53,10 @@ let
       echo OK
 
       echo -n "msg: upgrading code... "
-      (cd \$PHUTIL && git checkout master && git pull origin master) > /dev/null 2>&1
-      (cd \$ARC && git checkout master && git pull origin master) > /dev/null 2>&1
+      (cd \$PHUTIL && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
+      (cd \$ARC && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
       echo OK
 
       echo -n "msg: upgrading database... "
@@ -219,7 +221,7 @@ in
       };
 
     environment.systemPackages =
-      [ pkgs.nodejs php phab-admin pkgs.which
+      [ php phab-admin pkgs.nodejs pkgs.php_apc pkgs.which
         pkgs.ssmtp
       ];
   };
