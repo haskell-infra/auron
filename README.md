@@ -38,7 +38,7 @@ To get started, deploy a MariaDB and Phabricator pair:
 $ nixops deploy --include mysql01 phabricator
 ```
 
-NOTE: This generates temporary SSL keys for nginx.
+NOTE: This generates temporary SSL keys for nginx under `/root/ssl`.
 
 We also need to generate keys for `spiped`, so that the Phabricator
 server can securely communicate with the MariaDB server. This
