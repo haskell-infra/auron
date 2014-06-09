@@ -7,21 +7,31 @@ let
   cfg = config.services.phabricator;
   php = pkgs.php54;
 
-  libphutil = {
-    url = git://github.com/haskell-infra/libphutil.git;
-    rev = "7e75bf271c669b61eb6e6e2ea312a36e64b80a4a";
+  # APC 3.1.13 is recommended for Phabricator
+  pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
+    inherit php;
+    inherit (pkgs) stdenv autoreconfHook;
+  };
+  phab-apc = pecl rec {
+    name = "phab-apc-${version}";
+    version = "3.1.13";
+    src = pkgs.fetchurl {
+      url = "http://pecl.php.net/get/apc-${version}.tgz";
+      sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
+    };
   };
 
-  arcanist = {
-    url = git://github.com/haskell-infra/arcanist.git;
-    rev = "bec13cfea898b93460e83531a82c241c634e4c1b";
-  };
+  phpIni = pkgs.runCommand "php.ini" {} ''
+    cat ${php}/etc/php-recommended.ini > $out
 
-  phabricator = {
-    url = git://github.com/haskell-infra/phabricator.git;
-    rev = "a0c9869111fa98ee780c2fdcd5d5c6dd1b58fd2e";
-  };
+    echo "extension=${phab-apc}/lib/php/extensions/apc.so" >> $out
+    echo "apc.stat = '0'" >> $out
+    substituteInPlace $out \
+      --replace ";upload_max_filesize = 2M" \
+                "upload_max_filesize = ${cfg.uploadLimit}"
+  '';
 
+  # Useful administration package for Phabricator
   phab-admin = pkgs.stdenv.mkDerivation rec {
     name = "phab-admin";
 
@@ -34,7 +44,7 @@ let
       set -e
 
       if [ -z "\$1" ]; then
-        echo "err: argument must be mysql root password for phabricator upgrade"
+        echo "err: argument must be mysql pass or '--nopass'"
         exit 1
       fi
 
@@ -45,11 +55,9 @@ let
 
       echo -n "msg: stopping phabricator systemd services... "
       systemctl stop nginx
-      systemctl stop nginx
-      systemctl stop phabricator-gc
-      systemctl stop phabricator-pull
-      systemctl stop phabricator-taskmaster1
-      systemctl stop phabricator-aphlict
+      systemctl stop phpfpm
+      \$PHAB/bin/phd     stop > /dev/null 2>&1
+      \$PHAB/bin/aphlict stop > /dev/null 2>&1
       echo OK
 
       echo -n "msg: upgrading code... "
@@ -57,18 +65,23 @@ let
         /dev/null 2>&1
       (cd \$ARC && git checkout master && git pull origin master) > \
         /dev/null 2>&1
+      (cd \$PHAB && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
       echo OK
 
+      if [ "\$1"="--nopass" ]; then
+        PASS=
+      else
+        PASS=--password \$1
+      fi
+
       echo -n "msg: upgrading database... "
-      \$PHAB/bin/storage upgrade --force --user root \
-        --password \$1 > /dev/null 2>&1
+      \$PHAB/bin/storage upgrade --force --user root \$PASS > /dev/null 2>&1
       echo OK
 
       echo -n "msg: restarting phabricator systemd services... "
-      systemctl start phabricator-aphlict
-      systemctl start phabricator-taskmaster1
-      systemctl start phabricator-pull
-      systemctl start phabricator-gc
+      \$PHAB/bin/aphlict start > /dev/null 2>&1
+      \$PHAB/bin/phd     start > /dev/null 2>&1
       systemctl start phpfpm
       systemctl start nginx
       echo OK
@@ -80,8 +93,15 @@ let
       exec ./bin/config \$@
       EOF
 
+      cat > $out/sbin/phab-phd <<EOF
+      #!/bin/sh
+      cd /var/lib/phab/phabricator
+      exec ./bin/phd \$@
+      EOF
+
       chmod +x $out/sbin/phab-upgrade
       chmod +x $out/sbin/phab-config
+      chmod +x $out/sbin/phab-phd
     '';
   };
 in
@@ -91,9 +111,28 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If enabled, enable Phabricator with php-fpm
-        '';
+        description = "If enabled, enable Phabricator with php-fpm.";
+      };
+
+      src = mkOption {
+        type = types.attrsOf types.str;
+        description = "Location of Phabricator source repositories.";
+        default = {
+          libphutil   = "git://github.com/phacility/libphutil.git";
+          arcanist    = "git://github.com/phacility/arcanist.git";
+          phabricator = "git://github.com/phacility/phabricator.git";
+        };
+      };
+
+      uploadLimit = mkOption {
+        type = types.str;
+        default = "10M";
+        description = "Upload file size limit for Phabricator/phpfpm";
+      };
+
+      baseURI = mkOption {
+        type = types.str;
+        description = "Base URI for Phabricator.";
       };
     };
   };
@@ -121,92 +160,34 @@ in
         script = ''
           cd /var/lib/phab
           if [ ! -d libphutil ]; then
-            ${pkgs.git}/bin/git clone ${libphutil.url}
-            cd libphutil && ${pkgs.git}/bin/git checkout ${libphutil.rev}
-            cd ..
+            ${pkgs.git}/bin/git clone ${cfg.src.libphutil}
           fi
           if [ ! -d arcanist ]; then
-            ${pkgs.git}/bin/git clone ${arcanist.url}
-            cd arcanist && ${pkgs.git}/bin/git checkout ${arcanist.rev}
-            cd ..
+            ${pkgs.git}/bin/git clone ${cfg.src.arcanist}
           fi
           if [ ! -d phabricator ]; then
-            ${pkgs.git}/bin/git clone ${phabricator.url}
-            cd phabricator && ${pkgs.git}/bin/git checkout ${phabricator.rev}
-            cd ..
+            ${pkgs.git}/bin/git clone ${cfg.src.phabricator}
           fi
 
           mkdir -p /var/repo
           chown -R phab:phab /var/lib/phab /var/repo
-          ${phab-admin}/sbin/phab-config set storage.upload-size-limit 50M
+          ${phab-admin}/sbin/phab-config set mysql.port 3306
+          ${phab-admin}/sbin/phab-config set phabricator.base-uri \
+            ${cfg.baseURI}
+          ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
+            ${cfg.uploadLimit}
           ${phab-admin}/sbin/phab-config set phabricator.timezone \
             ${config.time.timeZone}
           ${phab-admin}/sbin/phab-config set environment.append-paths \
             '["/run/current-system/sw/bin","/run/current-system/sw/sbin"]'
-
         '';
 
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
       };
 
-    systemd.services."phabricator-aphlict" =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "phabricator-init.service" ];
-
-        path = [ pkgs.nodejs php pkgs.which ];
-        serviceConfig.Restart = "always";
-        serviceConfig.ExecStart =
-          "${php}/bin/php /var/lib/phab/phabricator/bin/aphlict debug";
-      };
-
-    /*
-    systemd.services."phabricator-bot" =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "phabricator-init.service" ];
-
-        path = [ php ];
-        serviceConfig.User    = "phab";
-        serviceConfig.Restart = "always";
-      };
-    */
-
-    systemd.services."phabricator-gc" =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "phabricator-init.service" ];
-
-        path = [ php ];
-        serviceConfig.User    = "phab";
-        serviceConfig.Restart = "always";
-        serviceConfig.ExecStart =
-          "${php}/bin/php /var/lib/phab/phabricator/bin/phd debug " +
-          "PhabricatorGarbageCollectorDaemon";
-      };
-
-    systemd.services."phabricator-taskmaster1" =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "phabricator-init.service" ];
-
-        path = [ php ];
-        serviceConfig.User    = "phab";
-        serviceConfig.Restart = "always";
-        serviceConfig.ExecStart =
-          "${php}/bin/php /var/lib/phab/phabricator/bin/phd debug " +
-          "PhabricatorTaskmasterDaemon";
-      };
-
-    systemd.services."phabricator-pull" =
-      { wantedBy = [ "multi-user.target" ];
-        requires = [ "phabricator-init.service" ];
-
-        path = [ php ];
-        serviceConfig.User    = "phab";
-        serviceConfig.Restart = "always";
-        serviceConfig.ExecStart =
-          "${php}/bin/php /var/lib/phab/phabricator/bin/phd debug " +
-          "PhabricatorRepositoryPullLocalDaemon";
-      };
-
+    systemd.services.phpfpm.environment = { PHPRC = phpIni; };
+    systemd.services.phpfpm.path = [ pkgs.ssmtp ];
     services.phpfpm.poolConfigs =
       { phabricator = ''
           listen = /run/phpfpm/phabricator.sock
@@ -220,9 +201,7 @@ in
         '';
       };
 
-    environment.systemPackages =
-      [ php phab-admin pkgs.nodejs pkgs.php_apc pkgs.which
-        pkgs.ssmtp
-      ];
+    environment.systemPackages = with pkgs;
+      [ php phab-admin nodejs which ];
   };
 }

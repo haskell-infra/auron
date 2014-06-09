@@ -34,6 +34,14 @@ with import ./nginx.nix { inherit lib; };
 
   /* Phabricator configuration */
   services.phabricator.enable = true;
+  services.phabricator.uploadLimit = "50M";
+  services.phabricator.baseURI = "https://192.168.56.101/";
+  services.phabricator.src = {
+    libphutil   = "git://github.com/haskell-infra/libphutil.git";
+    arcanist    = "git://github.com/haskell-infra/arcanist.git";
+    phabricator = "git://github.com/haskell-infra/phabricator.git";
+  };
+
   services.nginx.enable = true;
   services.nginx.config = httpsOnly
     { serverNames = "phabricator.haskell.org phabricator-files.haskell.org";
