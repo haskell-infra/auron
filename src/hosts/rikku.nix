@@ -9,6 +9,9 @@ with lib;
 with builtins;
 with import ./nginx.nix { inherit lib; };
 
+let
+  uploadSize = "50M";
+in
 {
   require = [ ./common.nix
               ../modules/phabricator.nix
@@ -34,7 +37,7 @@ with import ./nginx.nix { inherit lib; };
 
   /* Phabricator configuration */
   services.phabricator.enable = true;
-  services.phabricator.uploadLimit = "50M";
+  services.phabricator.uploadLimit = uploadSize;
   services.phabricator.baseURI = "https://192.168.56.101/";
   services.phabricator.src = {
     libphutil   = "git://github.com/haskell-infra/libphutil.git";
@@ -48,7 +51,7 @@ with import ./nginx.nix { inherit lib; };
       hsts       = false;
       xframeDeny = false;
       config = ''
-        client_max_body_size 50m;
+        client_max_body_size ${uploadSize};
         # The following is the recommended Phabricator config for Nginx.
         root /var/lib/phab/phabricator/webroot;
 
