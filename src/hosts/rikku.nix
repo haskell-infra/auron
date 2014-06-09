@@ -38,7 +38,6 @@ in
   /* Phabricator configuration */
   services.phabricator.enable = true;
   services.phabricator.uploadLimit = uploadSize;
-  services.phabricator.baseURI = "https://192.168.56.101/";
   services.phabricator.src = {
     libphutil   = "git://github.com/haskell-infra/libphutil.git";
     arcanist    = "git://github.com/haskell-infra/arcanist.git";

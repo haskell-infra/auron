@@ -139,11 +139,6 @@ in
         default = "10M";
         description = "Upload file size limit for Phabricator/phpfpm";
       };
-
-      baseURI = mkOption {
-        type = types.str;
-        description = "Base URI for Phabricator.";
-      };
     };
   };
 
@@ -182,8 +177,6 @@ in
           mkdir -p /var/repo
           chown -R phab:phab /var/lib/phab /var/repo
           ${phab-admin}/sbin/phab-config set mysql.port 3306
-          ${phab-admin}/sbin/phab-config set phabricator.base-uri \
-            ${cfg.baseURI}
           ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
             ${cfg.uploadLimit}
           ${phab-admin}/sbin/phab-config set phabricator.timezone \
