@@ -1,8 +1,9 @@
 Auron
 =================
 
-Auron is the open source codebase for Haskell.org for automation and
-tooling. We use it to:
+Auron is the open source codebase for Haskell.org for automation,
+built on [NixOS](http://nixos.org) and
+[NixOps](http://nixos.org/nixops). We use it to:
 
  - Deploy things reproducibly and easily from any Linux box.
  - Send status updates to the [status site](http://status.haskell.org).
@@ -14,7 +15,7 @@ Setup
 
 IMPORTANT: You must be using Linux and
 [Nix](http://nixos.org/nix/manual/#chap-installation) 1.7 or later for
-things to work properly!
+things to work properly! Otherwise `./bin/shell` will not start.
 
 - Clone this repo
 - Run `./bin/shell`
@@ -42,19 +43,41 @@ NOTE: The `rackspace` provider does not work and falls back to
 VirtualBox. See
 [NixOps issue #168](https://github.com/NixOS/nixops/issues/168).
 
-NOTE: Read the [NixOps manual](http://nixos.org/nixops/manual/) to get
-EC2 keys set up for testing.
+NOTE: Read the [NixOps manual](http://nixos.org/nixops/manual/) for
+more information, including how to get EC2 keys set up for testing.
 
 
 CONTRIBUTING
 =================
 
-Patches, comments, etc should be submitted through
-[Phabricator](https://phabricator.haskell.org).
+Patches, comments, and tickets should be submitted through
+[Phabricator](https://phabricator.haskell.org), using Maniphest and
+Arcanist. You'll need to create an account.
 
-See the `CONTRIBUTING.md` file for details.
+If you have a patch, first, drop into `./bin/shell`, then commit it
+and upload with `arc diff`:
+
+```
+$ ./bin/shell
+$ git commit -asm "Fix thing"
+$ arc diff
+```
+
+NOTE: Using `./bin/shell` is the recommended way to use the `arc`
+tool, to ensure it is the same version that Haskell.org uses.
+
+IMPORTANT: Make sure you use `-s` to add a `Signed-off-by` line! This
+specifies you agree the submitted code abides by the project license
+unless explicitly noted otherwise.
+
+For reviewers, you can specify `#auron` to add all of the developers.
+
+Read the Arcanist
+[guide](https://secure.phabricator.com/book/phabricator/article/arcanist/)
+for more.
 
 LICENSE
 =================
 
-Auron is released under the MIT license except as otherwise noted.
+Auron is released under the MIT license except as otherwise noted. See
+`LICENSE.txt` for details.
