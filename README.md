@@ -38,9 +38,6 @@ $ export NIXOPS_DEPLOYMENT=ec2
 $ export NIXOPS_DEPLOYMENT=rackspace
 ```
 
-You can change `vbox` to other things, such as `ec2` (provided you have a
-valid `~/.ec2-keys` set up), or `rackspace` (which doesn't work yet).
-
 NOTE: The `rackspace` provider does not work and falls back to
 VirtualBox. See
 [NixOps issue #168](https://github.com/NixOS/nixops/issues/168).
