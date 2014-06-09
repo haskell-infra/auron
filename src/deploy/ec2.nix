@@ -15,15 +15,18 @@ in
 {
   network.description = "Haskell.org (EC2)";
 
-  planet      = ec2;
-  mysql01     = ec2;
-  wiki        = ec2;
-  phabricator = ec2;
-  darcs       = ec2;
-  ghc         = ec2;
-  www         = ec2;
-  hackage     = ec2;
-  monitor     = ec2;
+  planet        = ec2;
+  mysql01       = ec2;
+  wiki          = ec2;
+  phabricator   = ec2;
+  darcs         = ec2;
+  ghc           = ec2;
+  www           = ec2;
+  hackage       = ec2;
+  monitor       = ec2;
+  hackage-build = ec2;
+  community     = ec2;
+  mail          = ec2;
 
   # Provision an EC2 key.
   resources.ec2KeyPairs.haskell-keypair =
