@@ -34,10 +34,10 @@ let
     cat ${php}/etc/php-recommended.ini > $out
 
     echo "extension=${phab-apc}/lib/php/extensions/apc.so" >> $out
-    echo "extension=${phab-suhosin}/lib/php/extensions/suhosin.so" >> $out
+    #echo "extension=${phab-suhosin}/lib/php/extensions/suhosin.so" >> $out
     echo "apc.stat = '0'" >> $out
     substituteInPlace $out \
-      --replace ";upload_max_filesize = 2M" \
+      --replace "upload_max_filesize = 2M" \
                 "upload_max_filesize = ${cfg.uploadLimit}"
   '';
 
@@ -191,6 +191,7 @@ in
             ${phab-admin}/sbin/phab-config set storage.local-disk.path \
               ${cfg.localStoragePath}
           ''}
+          ${phab-admin}/sbin/phab-config set files.enable-imagemagick true
           ${phab-admin}/sbin/phab-config set storage.mysql-engine.max-size 0
           ${phab-admin}/sbin/phab-config set storage.upload-size-limit \
             ${cfg.uploadLimit}
@@ -223,6 +224,6 @@ in
       };
 
     environment.systemPackages = with pkgs;
-      [ php phab-admin nodejs which ];
+      [ php phab-admin nodejs which imagemagick ];
   };
 }
