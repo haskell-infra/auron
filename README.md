@@ -90,7 +90,7 @@ NOTE: Read the [NixOps manual](http://nixos.org/nixops/manual/) for
 more information, including how to get EC2 keys set up for testing.
 
 
-CONTRIBUTING
+Contributing
 =================
 
 Patches, comments, and tickets should be submitted through
@@ -119,7 +119,7 @@ Read the Arcanist
 [guide](https://secure.phabricator.com/book/phabricator/article/arcanist/)
 for more.
 
-LICENSE
+License
 =================
 
 Auron is released under the MIT license except as otherwise noted. See
