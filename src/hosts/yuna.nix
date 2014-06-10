@@ -32,7 +32,7 @@ let
     fastcgi_param  SERVER_PORT        $server_port;
     fastcgi_param  SERVER_NAME        $server_name;
     fastcgi_param  REDIRECT_STATUS    200;
-    fastcgi_pass unix:/run/hhvm/hhvm.sock;
+    fastcgi_pass localhost:9000;
   '';
 in
 {

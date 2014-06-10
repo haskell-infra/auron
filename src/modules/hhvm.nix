@@ -61,8 +61,7 @@ in
           #!{stdenv.shell}
           chown nginx -R ${stateDir} && cd ${stateDir}
           ${pkgs.hhvm}/bin/hhvm --mode server -c ${phpIni} --user nginx \
-            -vServer.Type=fastcgi \
-            -vServer.FileSocket=${stateDir}/hhvm.sock \
+            -vServer.Type=fastcgi -vServer.Port=9000 \
             ${optionalString cfg.debug "-vAdminServer.Port=9001"}
         '';
       };
