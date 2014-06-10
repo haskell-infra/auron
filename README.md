@@ -129,7 +129,7 @@ If you're going to hack on the source code, here are some notes.
     <td>Custom NixOS modules for our servers.</td>
   </tr>
   <tr>
-    <td>`src/modules/`</td>
+    <td>`src/pkgs/`</td>
     <td>Custom Nix packages for our servers.</td>
   </tr>
   <tr>
