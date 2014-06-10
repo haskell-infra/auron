@@ -214,6 +214,67 @@ to improve `mysql01`, look in `src/hosts/vivi.nix`.
   </tr>
 </table>
 
+**Status**:
+
+The following table lists the current status of each machine in terms
+of parity with the current Haskell.org in features and stability.
+
+<table>
+  <tr>
+    <th>Hostname</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>Squall/planet</td>
+    <td>**In-progress**</td>
+  </tr>
+  <tr>
+    <td>Vivi/mysql01</td>
+    <td>**Done**, with `spiped`.</td>
+  </tr>
+  <tr>
+    <td>Yuna/wiki</td>
+    <td>**In-progress**</td>
+  </tr>
+  <tr>
+    <td>Rikku/phabricator</td>
+    <td>**Done**, with `spiped` daemon for `vivi`</td>
+  </tr>
+  <tr>
+    <td>Rinoa/darcs</td>
+    <td>**Mostly done**</td>
+  </tr>
+  <tr>
+    <td>Cloud/ghc</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Cid/www</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Terra/hackage</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Lulu/monitor</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Barret/hackage-build</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Freya/community</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Fran/mail</td>
+    <td>**Incomplete**</td>
+  </tr>
+</table>
+
+
 Contributing
 =================
 
