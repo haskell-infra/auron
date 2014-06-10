@@ -165,52 +165,52 @@ to improve `mysql01.nix`, look in `src/hosts/vivi.nix`.
     <th>Physical hostname</th>
   </tr>
   <tr>
-    <th>[planet](https://planet.haskell.org)</th>
-    <th>Squall</th>
+    <td>[planet](https://planet.haskell.org)</td>
+    <td>Squall</td>
   </tr>
   <tr>
-    <th>`mysql01`</th>
-    <th>Vivi</th>
+    <td>`mysql01`</td>
+    <td>Vivi</td>
   </tr>
   <tr>
-    <th>[wiki](https://wiki.haskell.org)</th>
-    <th>Yuna</th>
+    <td>[wiki](https://wiki.haskell.org)</td>
+    <td>Yuna</td>
   </tr>
   <tr>
-    <th>[phabricator](https://phabricator.haskell.org)</th>
-    <th>Rikku</th>
+    <td>[phabricator](https://phabricator.haskell.org)</td>
+    <td>Rikku</td>
   </tr>
   <tr>
-    <th>[darcs](https://darcs.haskell.org)</th>
-    <th>Rinoa</th>
+    <td>[darcs](https://darcs.haskell.org)</td>
+    <td>Rinoa</td>
   </tr>
   <tr>
-    <th>[ghc](https://ghc.haskell.org/trac/ghc)</th>
-    <th>Cloud</th>
+    <td>[ghc](https://ghc.haskell.org/trac/ghc)</td>
+    <td>Cloud</td>
   </tr>
   <tr>
-    <th>[www](https://www.haskell.org)</th>
-    <th>Cid</th>
+    <td>[www](https://www.haskell.org)</td>
+    <td>Cid</td>
   </tr>
   <tr>
-    <th>[hackage](https://hackage.haskell.org)</th>
-    <th>Terra</th>
+    <td>[hackage](https://hackage.haskell.org)</td>
+    <td>Terra</td>
   </tr>
   <tr>
-    <th>[monitor](https://monitor.haskell.org)</th>
-    <th>Lulu</th>
+    <td>[monitor](https://monitor.haskell.org)</td>
+    <td>Lulu</td>
   </tr>
   <tr>
-    <th>`hackage-build`</th>
-    <th>Barret</th>
+    <td>`hackage-build`</td>
+    <td>Barret</td>
   </tr>
   <tr>
-    <th>[community](http://community.haskell.org)</th>
-    <th>Freya</th>
+    <td>[community](http://community.haskell.org)</td>
+    <td>Freya</td>
   </tr>
   <tr>
-    <th>`mail`</th>
-    <th>Fran</th>
+    <td>`mail`</td>
+    <td>Fran</td>
   </tr>
 </table>
 
