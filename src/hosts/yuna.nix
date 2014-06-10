@@ -23,7 +23,7 @@ let
   '';
 in
 {
-  require = [ ./common.nix ./roles/gencert.nix ];
+  require = [ ./roles/common.nix ./roles/gencert.nix ];
 
   /* Networking configuration */
   networking.hostName = "yuna";

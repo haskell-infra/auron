@@ -8,7 +8,7 @@
 with builtins;
 
 {
-  require = [ ./common.nix ];
+  require = [ ./roles/common.nix ];
 
   /* Networking configuration */
   networking.hostName = "freya";

@@ -10,7 +10,7 @@ with builtins;
 with import ./roles/nginx.nix { inherit lib; };
 
 {
-  require = [ ./common.nix ./roles/gencert.nix ];
+  require = [ ./roles/common.nix ./roles/gencert.nix ];
 
   /* Networking configuration */
   networking.hostName = "lulu";

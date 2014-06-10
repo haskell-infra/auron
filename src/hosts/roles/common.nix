@@ -5,14 +5,8 @@ with builtins;
 with import ../res/users.nix { inherit lib; };
 with import ../res/groups.nix;
 
-let
-  gencert = import ../pkgs/gencert.nix;
-in
 {
-  imports = [ ./roles/datadog.nix
-              ./roles/duosec.nix
-              ./roles/tarsnap.nix
-            ];
+  imports = [ ./datadog.nix ./tarsnap.nix ./duosec.nix ];
   nixpkgs.config.allowUnfree = true;
 
   # -- Networking
@@ -53,8 +47,5 @@ in
   environment.systemPackages = with pkgs;
     [ emacs24-nox vim subversion git darcs sqlite gcc htop mosh spiped tmux
       silver-searcher reptyr nmap ssdeep gdb python27 lsof scrypt
-
-      # Custom packages
-      gencert
     ];
 }

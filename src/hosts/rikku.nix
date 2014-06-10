@@ -13,7 +13,7 @@ let
   uploadSize = "50M";
 in
 {
-  require = [ ./common.nix
+  require = [ ./roles/common.nix
               ./roles/gencert.nix
               ../modules/phabricator.nix
             ];
