@@ -2,8 +2,8 @@
 
 with lib;
 with builtins;
-with import ../res/users.nix { inherit lib; };
-with import ../res/groups.nix;
+with import ../../res/users.nix { inherit lib; };
+with import ../../res/groups.nix;
 
 {
   imports = [ ./datadog.nix ./tarsnap.nix ./duosec.nix ];
@@ -45,7 +45,7 @@ with import ../res/groups.nix;
 
   # -- Environment options
   environment.systemPackages = with pkgs;
-    [ emacs24-nox vim subversion git darcs sqlite gcc htop mosh spiped tmux
+    [ emacs24-nox vim subversion git sqlite gcc htop mosh spiped tmux
       silver-searcher reptyr nmap ssdeep gdb python27 lsof scrypt
     ];
 }
