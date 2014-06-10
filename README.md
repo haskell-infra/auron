@@ -96,7 +96,7 @@ Hacking
 
 If you're going to hack on the source code, here are some notes.
 
-Filesystem layout:
+**Filesystem layout**:
 
 <table>
   <tr>
@@ -104,12 +104,113 @@ Filesystem layout:
     <th>Purpose</th>
   </tr>
   <tr>
-    <td>`/bin`</td>
+    <td>`bin/`</td>
     <td>Scripts for launching the main shell and interacting with machines.</td>
   </tr>
   <tr>
-    <td>`/etc`</td>
+    <td>`etc/`</td>
     <td>3rd party source code and private data.</td>
+  </tr>
+  <tr>
+    <td>`src/`</td>
+    <td>NixOps expressions.</td>
+  </tr>
+  <tr>
+    <td>`src/deploy/`</td>
+    <td>Expressions for deployment endpoints (EC2, VBox, or Rackspace).</td>
+  </tr>
+  <tr>
+    <td>`src/hosts/`</td>
+    <td>Host descriptions for every major
+    [Haskell.org](https://haskell.org) server.</td>
+  </tr>
+  <tr>
+    <td>`src/modules/`</td>
+    <td>Custom NixOS modules for our servers.</td>
+  </tr>
+  <tr>
+    <td>`src/modules/`</td>
+    <td>Custom Nix packages for our servers.</td>
+  </tr>
+  <tr>
+    <td>`src/res/`</td>
+    <td>Misc. expressions, including user descriptions.</td>
+  </tr>
+  <tr>
+    <td>`src/network.nix`</td>
+    <td>Top-level NixOps network description.</td>
+  </tr>
+</table>
+
+**Hostname mapping**:
+
+The following table maps every //logical hostname// to a //physical hostname//.
+
+Externally, every host is referred to and known solely by the logical
+hostname (e.g. `mysql01`, `phabricator`, `wiki`). Logical hostnames
+also correspond to subdomains of `haskell.org`.
+
+The //physical hostnames// are the actual names of the boxes, as they
+exist on the machine. So if you access `user@mysql01`, after logging
+in the hostname will be `vivi`. These names are internal, and they are
+based on the names of Final Fantasy characters.
+
+NOTE: The source code file for every host under `src/hosts/` is named
+after the //physical// hostname, not the logical one! So if you want
+to improve `mysql01.nix`, look in `src/hosts/vivi.nix`.
+
+<table>
+  <tr>
+    <th>Logical hostname</th>
+    <th>Physical hostname</th>
+  </tr>
+  <tr>
+    <th>[planet](https://planet.haskell.org)</th>
+    <th>Squall</th>
+  </tr>
+  <tr>
+    <th>`mysql01`</th>
+    <th>Vivi</th>
+  </tr>
+  <tr>
+    <th>[wiki](https://wiki.haskell.org)</th>
+    <th>Yuna</th>
+  </tr>
+  <tr>
+    <th>[phabricator](https://phabricator.haskell.org)</th>
+    <th>Rikku</th>
+  </tr>
+  <tr>
+    <th>[darcs](https://darcs.haskell.org)</th>
+    <th>Rinoa</th>
+  </tr>
+  <tr>
+    <th>[ghc](https://ghc.haskell.org/trac/ghc)</th>
+    <th>Cloud</th>
+  </tr>
+  <tr>
+    <th>[www](https://www.haskell.org)</th>
+    <th>Cid</th>
+  </tr>
+  <tr>
+    <th>[hackage](https://hackage.haskell.org)</th>
+    <th>Terra</th>
+  </tr>
+  <tr>
+    <th>[monitor](https://monitor.haskell.org)</th>
+    <th>Lulu</th>
+  </tr>
+  <tr>
+    <th>`hackage-build`</th>
+    <th>Barret</th>
+  </tr>
+  <tr>
+    <th>[community](http://community.haskell.org)</th>
+    <th>Freya</th>
+  </tr>
+  <tr>
+    <th>`mail`</th>
+    <th>Fran</th>
   </tr>
 </table>
 
