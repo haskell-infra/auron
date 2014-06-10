@@ -157,7 +157,7 @@ based on the names of Final Fantasy characters.
 
 NOTE: The source code file for every host under `src/hosts/` is named
 after the //physical// hostname, not the logical one! So if you want
-to improve `mysql01.nix`, look in `src/hosts/vivi.nix`.
+to improve `mysql01`, look in `src/hosts/vivi.nix`.
 
 <table>
   <tr>
