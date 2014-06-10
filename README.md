@@ -5,6 +5,8 @@ Auron is the open source codebase automating
 [Haskell.org](https://haskell.org), built on [NixOS](http://nixos.org)
 and [NixOps](http://nixos.org/nixops). We use it to:
 
+ - Manage all of [Haskell.org](https://haskell.org), including users
+   and security updates.
  - Deploy things reproducibly and easily from any Linux box.
  - Send status updates to the [status site](http://status.haskell.org).
  - Send patches to [Phabricator](https://phabricator.haskell.org).
@@ -89,6 +91,27 @@ VirtualBox. See
 NOTE: Read the [NixOps manual](http://nixos.org/nixops/manual/) for
 more information, including how to get EC2 keys set up for testing.
 
+Hacking
+-----------------
+
+If you're going to hack on the source code, here are some notes.
+
+Filesystem layout:
+
+<table>
+  <tr>
+    <th>Directory</th>
+    <th>Purpose</th>
+  </tr>
+  <tr>
+    <td>`/bin`</td>
+    <td>Scripts for launching the main shell and interacting with machines.</td>
+  </tr>
+  <tr>
+    <td>`/etc`</td>
+    <td>3rd party source code and private data.</td>
+  </tr>
+</table>
 
 Contributing
 =================
