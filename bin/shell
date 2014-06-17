@@ -15,6 +15,7 @@ AURON_SRCDIR=$(dirname -- "$AURON_BINDIR")
 AURON_NIXDIR=$AURON_SRCDIR/etc
 AURON_ETCDIR=$AURON_SRCDIR/etc
 exec nix-shell release.nix -A shell \
+  --option extra-binary-caches http://hydra.nixos.org \
   --command "export NIX_PATH=$AURON_NIXDIR; \
              export AURON_ETCDIR=$AURON_ETCDIR; \
              for x in ec2 vbox rackspace; do \
