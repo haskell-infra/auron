@@ -230,7 +230,7 @@ of parity with the current Haskell.org in features and stability.
   </tr>
   <tr>
     <td>Vivi/mysql01</td>
-    <td>**Done**, with `spiped`.</td>
+    <td>**Done** (secured via `spiped`)</td>
   </tr>
   <tr>
     <td>Yuna/wiki</td>
@@ -238,11 +238,11 @@ of parity with the current Haskell.org in features and stability.
   </tr>
   <tr>
     <td>Rikku/phabricator</td>
-    <td>**Done**, with `spiped` daemon for `vivi`</td>
+    <td>**Done**</td>
   </tr>
   <tr>
     <td>Rinoa/darcs</td>
-    <td>**Mostly done**</td>
+    <td>**Done**</td>
   </tr>
   <tr>
     <td>Cloud/ghc</td>
@@ -258,7 +258,7 @@ of parity with the current Haskell.org in features and stability.
   </tr>
   <tr>
     <td>Lulu/monitor</td>
-    <td>**Incomplete**</td>
+    <td>**Mostly complete** (Nagios, no Datadog stats)</td>
   </tr>
   <tr>
     <td>Barret/hackage-build</td>
