@@ -125,6 +125,11 @@ If you're going to hack on the source code, here are some notes.
     [Haskell.org](https://haskell.org) server.</td>
   </tr>
   <tr>
+    <td>`src/hosts/roles`</td>
+    <td>Specific roles that a host may take on, including monitoring,
+    services, etc.</td>
+  </tr>
+  <tr>
     <td>`src/modules/`</td>
     <td>Custom NixOS modules for our servers.</td>
   </tr>
