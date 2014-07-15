@@ -27,6 +27,8 @@ in
   hackage-build = ec2;
   community     = ec2;
   mail          = ec2;
+  phab-ghc01    = ec2;
+  try           = ec2;
 
   # Provision an EC2 key.
   resources.ec2KeyPairs.haskell-keypair =

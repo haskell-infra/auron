@@ -20,4 +20,6 @@ in
   hackage-build = vbox;
   community     = vbox;
   mail          = vbox;
+  phab-ghc01    = vbox;
+  try           = vbox;
 }

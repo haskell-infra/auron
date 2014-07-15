@@ -217,6 +217,14 @@ to improve `mysql01`, look in `src/hosts/vivi.nix`.
     <td>`mail`</td>
     <td>Fran</td>
   </tr>
+  <tr>
+    <td>`try`</td>
+    <td>Kimahri</td>
+  </tr>
+  <tr>
+    <td>`phab-ghc01`</td>
+    <td>Wakka</td>
+  </tr>
 </table>
 
 **Status**:
@@ -275,6 +283,14 @@ of parity with the current Haskell.org in features and stability.
   </tr>
   <tr>
     <td>Fran/mail</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Kimahri/try</td>
+    <td>**Incomplete**</td>
+  </tr>
+  <tr>
+    <td>Wakka/phab-ghc01</td>
     <td>**Incomplete**</td>
   </tr>
 </table>

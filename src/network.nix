@@ -16,4 +16,6 @@
   hackage-build = import ./hosts/barret.nix;
   community     = import ./hosts/freya.nix;
   mail          = import ./hosts/fran.nix;
+  phab-ghc01    = import ./hosts/wakka.nix;
+  try           = import ./hosts/kimahri.nix;
 }
