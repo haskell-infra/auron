@@ -9,7 +9,7 @@ let
 
   # APC 3.1.13 is recommended for Phabricator
   pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
-    inherit php; inherit (pkgs) stdenv autoreconfHook;
+    inherit php; inherit (pkgs) stdenv autoreconfHook fetchurl;
   };
   phab-apc = pecl rec {
     name = "phab-apc-${version}";
