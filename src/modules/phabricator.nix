@@ -181,7 +181,7 @@ in
             ${pkgs.git}/bin/git clone ${cfg.src.phabricator}
           fi
 
-          mkdir -p /var/repo ${cfg.localStoragePath}
+          mkdir -p /var/repo /var/tmp/phd ${cfg.localStoragePath}
           ${phab-admin}/sbin/phab-config set mysql.port 3306
           ${optionalString (cfg.localStoragePath != null) ''
             ${phab-admin}/sbin/phab-config set storage.local-disk.path \
@@ -195,7 +195,7 @@ in
             ${config.time.timeZone}
           ${phab-admin}/sbin/phab-config set environment.append-paths \
             '["/run/current-system/sw/bin","/run/current-system/sw/sbin"]'
-          chown -R phab:phab /var/lib/phab /var/repo ${cfg.localStoragePath}
+          chown -R phab:phab /var/lib/phab /var/repo /var/tmp/phd ${cfg.localStoragePath}
         '';
 
         serviceConfig.User = "root";
