@@ -53,7 +53,7 @@ in
       config = ''
         client_max_body_size ${uploadSize};
         # The following is the recommended Phabricator config for Nginx.
-        root /var/lib/phab/phabricator/webroot;
+        root /var/lib/phabricator/phabricator/webroot;
 
         location / {
           index index.php;

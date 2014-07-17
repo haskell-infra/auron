@@ -57,7 +57,7 @@ let
         exit 1
       fi
 
-      ROOT=/var/lib/phab
+      ROOT=/var/lib/phabricator
       PHUTIL=\$ROOT/libphutil
       ARC=\$ROOT/arcanist
       PHAB=\$ROOT/phabricator
@@ -98,14 +98,14 @@ let
 
       cat > $out/sbin/phab-config <<EOF
       #!/bin/sh
-      cd /var/lib/phab/phabricator
+      cd /var/lib/phabricator/phabricator
       exec ./bin/config \$@
-      chown -R phab:phab /var/lib/phab ${cfg.localStoragePath} # Set perms
+      chown -R phab:phab /var/lib/phabricator ${cfg.localStoragePath} # Set perms
       EOF
 
       cat > $out/sbin/phab-phd <<EOF
       #!/bin/sh
-      cd /var/lib/phab/phabricator
+      cd /var/lib/phabricator/phabricator
       exec ./bin/phd \$@
       EOF
 
@@ -142,25 +142,25 @@ in
 
       localStoragePath = mkOption {
         type = types.nullOr types.str;
-        default = "/var/lib/phab/data";
+        default = "/var/lib/phabricator/data";
         description = "Path to store local files for Phabricator";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.phab = {
+    users.extraUsers.phabricator = {
       description = "Phabricator User";
-      home = "/var/lib/phab";
+      home = "/var/lib/phabricator";
       createHome = true;
-      uid  = with import ../res/ids.nix; uids.phab;
-      group = "phab";
+      uid  = with import ../res/ids.nix; uids.phabricator;
+      group = "phabricator";
       useDefaultShell = true;
     };
 
-    users.extraGroups.phab = {
-      name = "phab";
-      gid = with import ../res/ids.nix; gids.phab;
+    users.extraGroups.phabricator = {
+      name = "phabricator";
+      gid = with import ../res/ids.nix; gids.phabricator;
     };
 
     systemd.services."phabricator-init" =
@@ -170,7 +170,7 @@ in
 
         path = [ php ];
         script = ''
-          cd /var/lib/phab
+          cd /var/lib/phabricator
           if [ ! -d libphutil ]; then
             ${pkgs.git}/bin/git clone ${cfg.src.libphutil}
           fi
@@ -195,7 +195,7 @@ in
             ${config.time.timeZone}
           ${phab-admin}/sbin/phab-config set environment.append-paths \
             '["/run/current-system/sw/bin","/run/current-system/sw/sbin"]'
-          chown -R phab:phab /var/lib/phab /var/repo /var/tmp/phd ${cfg.localStoragePath}
+          chown -R phabricator:phabricator /var/lib/phabricator /var/repo /var/tmp/phd ${cfg.localStoragePath}
         '';
 
         serviceConfig.User = "root";
@@ -208,7 +208,9 @@ in
     services.phpfpm.poolConfigs =
       { phabricator = ''
           listen = /run/phpfpm/phabricator.sock
-          user = phab
+	  listen.owner = nginx
+	  listen.group = nginx
+          user = phabricator
           pm = dynamic
           pm.max_children = 75
           pm.start_servers = 10
