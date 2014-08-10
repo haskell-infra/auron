@@ -43,6 +43,7 @@ let
   # Useful administration package for Phabricator
   phab-admin = pkgs.stdenv.mkDerivation rec {
     name = "phab-admin";
+    buildInputs = [ pkgs.makeWrapper ];
 
     phases = "installPhase";
     installPhase = ''
@@ -95,23 +96,33 @@ let
       systemctl start nginx
       echo OK
       EOF
+      chmod +x $out/sbin/phab-upgrade
 
       cat > $out/sbin/phab-config <<EOF
       #!/bin/sh
-      cd /var/lib/phabricator/phabricator
-      exec ./bin/config \$@
-      chown -R phab:phab /var/lib/phabricator ${cfg.localStoragePath} # Set perms
+      cd /var/lib/phabricator/phabricator && exec ./bin/config \$@
+      chown -R phabricator:phabricator /var/lib/phabricator ${cfg.localStoragePath}
       EOF
-
-      cat > $out/sbin/phab-phd <<EOF
-      #!/bin/sh
-      cd /var/lib/phabricator/phabricator
-      exec ./bin/phd \$@
-      EOF
-
-      chmod +x $out/sbin/phab-upgrade
       chmod +x $out/sbin/phab-config
-      chmod +x $out/sbin/phab-phd
+
+      cat > $out/sbin/phab-run <<EOF
+      #!/bin/sh
+      NAME=\$1
+      shift
+      cd /var/lib/phabricator/phabricator && exec ./bin/\$NAME \$@
+      EOF
+      chmod +x $out/sbin/phab-run
+
+      PAPPS="accountadmin aphlict audit auth cache celerity commit-hook diviner drydock fact feed files harbormaster hunks i18n lipsum mail phd policy remove repository search sms ssh-auth ssh-auth-key ssh-connect ssh-exec storage"
+
+      for x in $PAPPS; do
+        makeWrapper $out/sbin/phab-run $out/sbin/phab-$x --add-flags "$x"
+      done
+
+      for x in $PAPPS; do
+        chmod +x $out/sbin/phab-$x
+      done
+
     '';
   };
 in
