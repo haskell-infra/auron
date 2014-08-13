@@ -1,7 +1,7 @@
 let
   vbox = { config, pkgs, ... }:
     { deployment.targetEnv = "virtualbox";
-      deployment.virtualbox.memorySize = 512;
+      deployment.virtualbox.memorySize = 1024;
       deployment.virtualbox.headless = true;
     };
 in
