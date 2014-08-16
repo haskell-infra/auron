@@ -39,11 +39,6 @@ in
   /* Phabricator configuration */
   services.phabricator.enable = true;
   services.phabricator.uploadLimit = uploadSize;
-  services.phabricator.src = {
-    libphutil   = "git://github.com/haskell-infra/libphutil.git";
-    arcanist    = "git://github.com/haskell-infra/arcanist.git";
-    phabricator = "git://github.com/haskell-infra/phabricator.git";
-  };
 
   services.nginx.enable = true;
   services.nginx.config = httpsOnly

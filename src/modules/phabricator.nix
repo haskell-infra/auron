@@ -7,33 +7,24 @@ let
   cfg = config.services.phabricator;
   php = pkgs.php54;
 
-  # APC 3.1.13 is recommended for Phabricator
   pecl = import <nixpkgs/pkgs/build-support/build-pecl.nix> {
     inherit php; inherit (pkgs) stdenv autoreconfHook fetchurl;
   };
   phab-apc = pecl rec {
-    name = "phab-apc-${version}";
-    version = "3.1.13";
-    src = pkgs.fetchurl {
-      url = "http://pecl.php.net/get/apc-${version}.tgz";
-      sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
-    };
+    # APC 3.1.13 is recommended for Phabricator
+    name = "apc-3.1.13";
+    sha256 = "1gcsh9iar5qa1yzpjki9bb5rivcb6yjp45lmjmp98wlyf83vmy2y";
   };
-
-  phab-suhosin = pecl rec {
-    name = "phab-suhosin-${version}";
-    version = "0.9.35";
-    src = pkgs.fetchurl {
-      url = "http://download.suhosin.org/suhosin-${version}.tgz";
-      sha256 = "088gk2wh2md56wplhsinm9avs56cvc129fqqvagx02q6nsqjxphr";
-    };
+  phab-scrypt = pecl rec {
+    name = "scrypt-1.2";
+    sha256 = "1yan3ya84bnjzspbfg46xw0whzj4f9zrmhl1c10f3m7mplr9n25m";
   };
 
   phpIni = pkgs.runCommand "php.ini" {} ''
     cat ${php}/etc/php-recommended.ini > $out
 
     echo "extension=${phab-apc}/lib/php/extensions/apc.so" >> $out
-    #echo "extension=${phab-suhosin}/lib/php/extensions/suhosin.so" >> $out
+    echo "extension=${phab-scrypt}/lib/php/extensions/scrypt.so" >> $out
     echo "apc.stat = '0'" >> $out
     substituteInPlace $out \
       --replace "upload_max_filesize = 2M" \
@@ -62,6 +53,9 @@ let
       PHUTIL=\$ROOT/libphutil
       ARC=\$ROOT/arcanist
       PHAB=\$ROOT/phabricator
+      PHUTILHASK=\$ROOT/libphutil-haskell
+      PHUTILRACK=\$ROOT/libphutil-rackspace
+      PHUTILSCRYPT=\$ROOT/libphutil-scrypt
 
       echo -n "msg: stopping phabricator systemd services... "
       systemctl stop nginx
@@ -72,6 +66,12 @@ let
 
       echo -n "msg: upgrading code... "
       (cd \$PHUTIL && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
+      (cd \$PHUTILHASK && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
+      (cd \$PHUTILRACK && git checkout master && git pull origin master) > \
+        /dev/null 2>&1
+      (cd \$PHUTILSCRYPT && git checkout master && git pull origin master) > \
         /dev/null 2>&1
       (cd \$ARC && git checkout master && git pull origin master) > \
         /dev/null 2>&1
@@ -139,9 +139,12 @@ in
         type = types.attrsOf types.str;
         description = "Location of Phabricator source repositories.";
         default = {
-          libphutil   = "git://github.com/phacility/libphutil.git";
-          arcanist    = "git://github.com/phacility/arcanist.git";
-          phabricator = "git://github.com/phacility/phabricator.git";
+          libphutil        = "git://github.com/haskell-infra/libphutil.git";
+          arcanist         = "git://github.com/haskell-infra/arcanist.git";
+          phabricator      = "git://github.com/haskell-infra/phabricator.git";
+          libphutil-hask   = "git://github.com/haskell-infra/libphutil-haskell.git";
+          libphutil-rack   = "git://github.com/haskell-infra/libphutil-rackspace.git";
+          libphutil-scrypt = "git://github.com/haskell-infra/libphutil-scrypt.git";
         };
       };
 
@@ -185,6 +188,15 @@ in
           if [ ! -d libphutil ]; then
             ${pkgs.git}/bin/git clone ${cfg.src.libphutil}
           fi
+          if [ ! -d libphutil-haskell ]; then
+            ${pkgs.git}/bin/git clone ${cfg.src.libphutil-hask}
+          fi
+          if [ ! -d libphutil-rackspace ]; then
+            ${pkgs.git}/bin/git clone ${cfg.src.libphutil-rack}
+          fi
+          if [ ! -d libphutil-scrypt ]; then
+            ${pkgs.git}/bin/git clone ${cfg.src.libphutil-scrypt}
+          fi
           if [ ! -d arcanist ]; then
             ${pkgs.git}/bin/git clone ${cfg.src.arcanist}
           fi
@@ -214,13 +226,13 @@ in
         serviceConfig.RemainAfterExit = true;
       };
 
-    systemd.services.phpfpm.environment = { PHPRC = phpIni; };
     services.phpfpm.phpPackage = php;
+    services.phpfpm.phpIni = phpIni;
     services.phpfpm.poolConfigs =
       { phabricator = ''
           listen = /run/phpfpm/phabricator.sock
-	  listen.owner = nginx
-	  listen.group = nginx
+          listen.owner = nginx
+          listen.group = nginx
           user = phabricator
           pm = dynamic
           pm.max_children = 75
