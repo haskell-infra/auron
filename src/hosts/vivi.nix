@@ -7,6 +7,10 @@
 
 with builtins;
 
+let
+  stopwords = pkgs.writeText "stopwords.txt"
+    (readFile (toPath (getEnv "AURON_ETCDIR")+"/stopwords.txt"));
+in
 {
   require = [ ./roles/common.nix ];
 
@@ -21,6 +25,8 @@ with builtins;
   services.mysql.package = pkgs.mariadb;
   services.mysql.extraOptions = ''
     sql_mode=STRICT_ALL_TABLES
+    ft_min_word_len=3
+    ft_stopword_file=${stopwords}
   '';
 
   /* Spiped frontend */
