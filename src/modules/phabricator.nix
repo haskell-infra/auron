@@ -29,6 +29,9 @@ let
     substituteInPlace $out \
       --replace "upload_max_filesize = 2M" \
                 "upload_max_filesize = ${cfg.uploadLimit}"
+    substituteInPlace $out \
+      --replace "post_max_size = 8M" \
+                "post_max_size = ${cfg.uploadLimit}"
   '';
 
   # Useful administration package for Phabricator
