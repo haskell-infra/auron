@@ -90,7 +90,7 @@ rec {
 
   simons = {
     description     = "Peter Simons";
-    home            = "/home/ricky";
+    home            = "/home/simons";
     createHome      = true;
     uid             = with import ./ids.nix; uids.simons;
     extraGroups     = [ "wheel" "duosec" "grsecurity" ];
