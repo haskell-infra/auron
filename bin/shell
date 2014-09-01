@@ -1,6 +1,6 @@
 #!/bin/sh
-(nix-env --version | grep -q '1.7') || {
-  echo "nix-env 1.7 is required but not found."
+(nix-env --version | grep -Eq '1\.7|1\.8') || {
+  echo "nix-env 1.7-1.8 is required but not found."
   echo "Update it using \`nix-env -i nix\`, or install nix by following the"
   echo "instructions here:"
   echo "http://hydra.nixos.org/build/11758030/download/1/manual/"\
