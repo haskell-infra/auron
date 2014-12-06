@@ -247,6 +247,6 @@ in
       };
 
     environment.systemPackages = with pkgs;
-      [ php phab-admin nodejs which imagemagick ];
+      [ php phab-admin nodejs which imagemagick arcanist jq ];
   };
 }
